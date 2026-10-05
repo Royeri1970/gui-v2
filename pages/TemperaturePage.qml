@@ -16,10 +16,22 @@ spacing: 20
 
 Repeater {
 model: [
-{ "name": "Kjøleskapet", "instance": 101 },
-{ "name": "Fryseren", "instance": 102 },
-{ "name": "Soverommet", "instance": 103 },
-{ "name": "Foran", "instance": 104 }
+{
+"name": "Kjøleskapet",
+"serviceUid": "com.victronenergy.temperature.virtual_b73fa283fe225243"
+},
+{
+"name": "Fryseren",
+"serviceUid": "com.victronenergy.temperature.virtual_319a2e76e5fe8c77"
+},
+{
+"name": "Soverommet",
+"serviceUid": "com.victronenergy.temperature.virtual_76fefb4d7c2b084c"
+},
+{
+"name": "Foran",
+"serviceUid": "com.victronenergy.temperature.virtual_91803acc929bc79e"
+}
 ]
 
 Rectangle {
@@ -28,14 +40,9 @@ height: 150
 radius: 16
 color: Theme.color_background_secondary
 
-readonly property var temperatureDevice:
-Global.environmentInputs.model.deviceForDeviceInstance(modelData.instance)
-
 VeQuickItem {
 id: temperatureItem
-uid: parent.temperatureDevice
-? parent.temperatureDevice.serviceUid + "/Temperature"
-: ""
+uid: modelData.serviceUid + "/Temperature"
 sourceUnit: Units.unitToVeUnit(VenusOS.Units_Temperature_Celsius)
 displayUnit: Units.unitToVeUnit(Global.systemSettings.temperatureUnit)
 }
