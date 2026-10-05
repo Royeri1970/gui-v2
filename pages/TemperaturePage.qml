@@ -18,19 +18,23 @@ Repeater {
 model: [
 {
 "name": "Kjøleskapet",
-"serviceUid": "com.victronenergy.temperature.virtual_b73fa283fe225243"
+"serviceName": "com.victronenergy.temperature.virtual_b73fa283fe225243",
+"instance": 101
 },
 {
 "name": "Fryseren",
-"serviceUid": "com.victronenergy.temperature.virtual_319a2e76e5fe8c77"
+"serviceName": "com.victronenergy.temperature.virtual_319a2e76e5fe8c77",
+"instance": 102
 },
 {
 "name": "Soverommet",
-"serviceUid": "com.victronenergy.temperature.virtual_76fefb4d7c2b084c"
+"serviceName": "com.victronenergy.temperature.virtual_76fefb4d7c2b084c",
+"instance": 103
 },
 {
 "name": "Foran",
-"serviceUid": "com.victronenergy.temperature.virtual_91803acc929bc79e"
+"serviceName": "com.victronenergy.temperature.virtual_91803acc929bc79e",
+"instance": 104
 }
 ]
 
@@ -42,7 +46,11 @@ color: Theme.color_background_secondary
 
 VeQuickItem {
 id: temperatureItem
-uid: modelData.serviceUid + "/Temperature"
+uid: BackendConnection.serviceUidFromName(
+modelData.serviceName,
+modelData.instance
+) + "/Temperature"
+
 sourceUnit: Units.unitToVeUnit(VenusOS.Units_Temperature_Celsius)
 displayUnit: Units.unitToVeUnit(Global.systemSettings.temperatureUnit)
 }
