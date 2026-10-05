@@ -87,6 +87,33 @@ anchors.horizontalCenter: parent.horizontalCenter
 value: temperatureItem.value ?? NaN
 unit: Global.systemSettings.temperatureUnit
 font.pixelSize: 38
+
+valueColor: {
+    var t = Number(temperatureItem.value)
+
+    if (isNaN(t))
+        return Theme.color_font_primary
+
+    if (modelData.instance === 101) {
+        if (t < 3)
+            return "#4da3ff"
+        if (t <= 5)
+            return Theme.color_green
+        return Theme.color_red
+    }
+
+    if (modelData.instance === 102) {
+        if (t <= -18)
+            return "#4da3ff"
+        return Theme.color_red
+    }
+
+    if (t < 18)
+        return "#4da3ff"
+    if (t <= 24)
+        return Theme.color_green
+    return Theme.color_red
+}
 }
 
 Label {
