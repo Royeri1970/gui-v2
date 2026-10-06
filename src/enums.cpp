@@ -221,8 +221,8 @@ QString Enums::dcMeter_typeToText(DcMeter_Type type) const
 		//% "AC charger"
 		return qtTrId("dcMeter_ac_charger");
 	case DcMeter_Type_Alternator:
-		//% "Alternator"
-		return qtTrId("dcMeter_alternator");
+		//% "DCDC Lading"
+		return QStringLiteral("DCDC Lading");
 	case DcMeter_Type_BilgePump:
 		//% "Bilge pump"
 		return qtTrId("dcMeter_bilge_pump");
