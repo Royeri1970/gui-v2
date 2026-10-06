@@ -70,11 +70,10 @@ SwipeViewPage {
 			//% "Tanks"
 			{ value: qsTrId("levels_page_tanks"), enabled: tanksTab.enabled },
 			//% "Environment"
-			{ value: qsTrId("levels_page_environment"), enabled: environmentTab.enabled }
 		]
 
 		// Prefer a tab that is enabled.
-		currentIndex: tanksTab.enabled || !environmentTab.enabled ? 0 : 1
+		currentIndex: 0
 
 		KeyNavigation.down: tabsFocusScope
 	}
@@ -107,15 +106,6 @@ SwipeViewPage {
 			focus: visible
 		}
 
-		EnvironmentTab {
-			id: environmentTab
-
-			anchors.fill: parent
-			animationEnabled: root.animationEnabled
-			enabled: Global.environmentInputs.model.count > 0
-			visible: tabBar.currentIndex === 1
-			focus: visible
-		}
 	}
 
 	// Show gradients on the left/right edges (or top/bottom in portrait) to indicate the page bounds.
