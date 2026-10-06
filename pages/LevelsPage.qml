@@ -12,7 +12,7 @@ SwipeViewPage {
 	// Used by StartPageConfiguration when this is the start page.
 	property alias currentTabIndex: tabBar.currentIndex
 
-	readonly property LevelsTab currentTabView: tabBar.currentIndex === 0 ? tanksTab : environmentTab
+	readonly property LevelsTab currentTabView: tanksTab
 
 	topLeftButton: VenusOS.StatusBar_LeftButton_ControlsInactive
 	fullScreenWhenIdle: true
