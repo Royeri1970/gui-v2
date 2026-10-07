@@ -42,6 +42,15 @@ OverviewWidget {
 			}
 			sourceType: VenusOS.ElectricalQuantity_Source_Dc
 			Layout.fillWidth: true
+		}
+
+		QuantityLabel {
+			visible: root.type === VenusOS.OverviewWidget_Type_Alternator && inputDeviceModel.count === 1 && !isNaN(firstDcDevice.voltage)
+			value: firstDcDevice.voltage
+			unit: VenusOS.Units_Volt_DC
+			alignment: Qt.AlignLeft
+			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_small
+			Layout.fillWidth: true
 			Layout.fillHeight: true
 		}
 	}
@@ -55,6 +64,11 @@ OverviewWidget {
 			Global.pageManager.pushPage(root._widgetOnlyPresentsDcGensets && Global.generators.multipleDcGensetsSupported
 										? "/pages/settings/PageDcGensets.qml" : listPageComponent)
 		}
+	}
+
+	DcDevice {
+		id: firstDcDevice
+		serviceUid: inputDeviceModel.count === 1 ? inputDeviceModel.firstObject.serviceUid : ""
 	}
 
 	DcMeterDeviceModel {
