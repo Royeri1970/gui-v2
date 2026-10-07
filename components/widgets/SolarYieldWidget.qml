@@ -90,7 +90,7 @@ OverviewWidget {
 					values.push(solarCurrent.value.toFixed(1) + " A")
 				if (chargerState.valid)
 					values.push(VenusOS.solarCharger_stateToText(chargerState.value))
-				return values.join("   ")
+				return values.join("\n")
 			}
 			color: Theme.color_font_secondary
 			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
