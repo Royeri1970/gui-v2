@@ -51,7 +51,6 @@ OverviewWidget {
 			alignment: Qt.AlignLeft
 			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_small
 			Layout.fillWidth: true
-			Layout.fillHeight: true
 		}
 	}
 
