@@ -42,6 +42,7 @@ OverviewWidget {
 			}
 			sourceType: VenusOS.ElectricalQuantity_Source_Dc
 			Layout.fillWidth: true
+			Layout.preferredHeight: implicitHeight
 		}
 
 		QuantityLabel {
@@ -51,6 +52,7 @@ OverviewWidget {
 			alignment: Qt.AlignLeft
 			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_small
 			Layout.fillWidth: true
+			Layout.preferredHeight: implicitHeight
 		}
 	}
 
