@@ -15,6 +15,25 @@ OverviewWidget {
 	readonly property bool _canShowGraph: Global.solarInputs.pvInverterDevices.count === 0
 	readonly property bool _showGraph: _canShowGraph && root.size >= VenusOS.OverviewWidget_Size_M
 
+readonly property string _solarServiceUid: Global.solarInputs.devices.count === 1 ? Global.solarInputs.devices.firstObject.serviceUid : ""
+
+SolarDevice {
+id: solarDevice
+serviceUid: root._solarServiceUid
+}
+
+SolarTracker {
+id: solarTracker
+serviceUid: root._solarServiceUid
+trackerIndex: 0
+trackerCount: solarDevice.trackerCount
+}
+
+VeQuickItem {
+id: chargerState
+uid: root._solarServiceUid ? root._solarServiceUid + "/State" : ""
+}
+
 	onClicked: {
 		const singleDeviceOnly = (Global.solarInputs.devices.count + Global.solarInputs.pvInverterDevices.count) === 1
 		if (singleDeviceOnly && Global.solarInputs.devices.count === 1) {
@@ -55,6 +74,24 @@ OverviewWidget {
 			dataObject: Global.system.solar
 			Layout.fillWidth: true
 			Layout.fillHeight: !root._showGraph // when graph is shown, allow it to expand to full height
+		}
+
+
+		Text {
+			visible: root._solarServiceUid !== ""
+			text: {
+				let values = []
+				if (!isNaN(solarTracker.voltage))
+					values.push(solarTracker.voltage.toFixed(1) + " V")
+				if (!isNaN(solarTracker.current))
+					values.push(solarTracker.current.toFixed(1) + " A")
+				if (chargerState.valid)
+					values.push(VenusOS.solarCharger_stateToText(chargerState.value))
+				return values.join("   ")
+			}
+			color: Theme.color_font_secondary
+			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
+			Layout.fillWidth: true
 		}
 
 		Loader {
