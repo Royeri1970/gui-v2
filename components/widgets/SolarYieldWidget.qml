@@ -15,24 +15,27 @@ OverviewWidget {
 	readonly property bool _canShowGraph: Global.solarInputs.pvInverterDevices.count === 0
 	readonly property bool _showGraph: _canShowGraph && root.size >= VenusOS.OverviewWidget_Size_M
 
-readonly property string _solarServiceUid: Global.solarInputs.devices.count === 1 ? Global.solarInputs.devices.firstObject.serviceUid : ""
+	readonly property string _solarServiceUid: Global.solarInputs.devices.count === 1 ? Global.solarInputs.devices.firstObject.serviceUid : ""
 
-SolarDevice {
-id: solarDevice
-serviceUid: root._solarServiceUid
-}
+	VeQuickItem {
+		id: solarVoltage
+		uid: root._solarServiceUid ? root._solarServiceUid + "/Dc/0/Voltage" : ""
+	}
 
-SolarTracker {
-id: solarTracker
-serviceUid: root._solarServiceUid
-trackerIndex: 0
-trackerCount: solarDevice.trackerCount
-}
+	VeQuickItem {
+		id: solarCurrent
+		uid: root._solarServiceUid ? root._solarServiceUid + "/Dc/0/Current" : ""
+	}
 
-VeQuickItem {
-id: chargerState
-uid: root._solarServiceUid ? root._solarServiceUid + "/State" : ""
-}
+	VeQuickItem {
+		id: solarYieldToday
+		uid: root._solarServiceUid ? root._solarServiceUid + "/History/Daily/0/Yield" : ""
+	}
+
+	VeQuickItem {
+		id: chargerState
+		uid: root._solarServiceUid ? root._solarServiceUid + "/State" : ""
+	}
 
 	onClicked: {
 		const singleDeviceOnly = (Global.solarInputs.devices.count + Global.solarInputs.pvInverterDevices.count) === 1
@@ -81,10 +84,10 @@ uid: root._solarServiceUid ? root._solarServiceUid + "/State" : ""
 			visible: root._solarServiceUid !== ""
 			text: {
 				let values = []
-				if (!isNaN(solarTracker.voltage))
-					values.push(solarTracker.voltage.toFixed(1) + " V")
-				if (!isNaN(solarTracker.current))
-					values.push(solarTracker.current.toFixed(1) + " A")
+				if (!isNaN(solarVoltage.value))
+					values.push(solarVoltage.value.toFixed(1) + " V")
+				if (!isNaN(solarCurrent.value))
+					values.push(solarCurrent.value.toFixed(1) + " A")
 				if (chargerState.valid)
 					values.push(VenusOS.solarCharger_stateToText(chargerState.value))
 				return values.join("   ")
