@@ -50,7 +50,7 @@ OverviewWidget {
 			value: firstDcDevice.voltage
 			unit: VenusOS.Units_Volt_DC
 			alignment: Qt.AlignLeft
-			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_small
+			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
 			Layout.fillWidth: true
 			Layout.preferredHeight: implicitHeight
 		}
