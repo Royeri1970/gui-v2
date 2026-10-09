@@ -9,6 +9,15 @@ import Victron.VenusOS
 FocusScope {
 	id: root
 
+	Image {
+		anchors.fill: parent
+		source: "qrc:/images/rapido-bg.png"
+		fillMode: Image.PreserveAspectCrop
+		opacity: 0.18
+		smooth: true
+		z: -100
+	}
+
 	required property bool isCurrentPage
 	required property bool animationEnabled
 
