@@ -1,0 +1,33 @@
+name: build-gx
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - temperatur-remote
+
+jobs:
+  build-gx:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install GX build requirements
+        run: |
+          chmod +x scripts/build-gx-install-requirements.sh
+          ./scripts/build-gx-install-requirements.sh
+
+      - name: Build native GX GUI
+        run: |
+          chmod +x scripts/build-gx.sh
+          ./scripts/build-gx.sh
+
+      - name: Upload GX build
+        uses: actions/upload-artifact@v4
+        with:
+          name: venus-gui-v2-gx
+          path: build-gx_files_to_copy/
