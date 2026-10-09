@@ -17,6 +17,16 @@ Window {
 	title: qsTrId("venus_os_gui")
 	color: Global.allPagesLoaded && !!guiLoader.item ? guiLoader.item.mainView.backgroundColor : Theme.color_page_background
 
+	Image {
+		anchors.fill: parent
+		source: Qt.platform.os === "wasm"
+				? "qrc:/images/rapido-bg.png"
+				: "file:/data/rapido-bg.png"
+		fillMode: Image.PreserveAspectCrop
+		opacity: 0.18
+		smooth: true
+	}
+
 	width: Qt.platform.os != "wasm" ? Theme.geometry_screen_width/scaleFactor : Screen.width/scaleFactor
 	height: Qt.platform.os != "wasm" ? Theme.geometry_screen_height/scaleFactor : Screen.height/scaleFactor
 

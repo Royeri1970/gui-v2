@@ -18,7 +18,7 @@ SwipeViewPage {
 	title: CommonWords.brief_page
 	iconSource: "qrc:/images/brief.svg"
 	url: "qrc:/qt/qml/Victron/VenusOS/pages/BriefPage.qml"
-	backgroundColor: Theme.screenSize === Theme.Portrait ? Theme.color_page_background : Theme.color_briefPage_background
+	backgroundColor: "transparent"
 	fullScreenWhenIdle: true
 	topLeftButton: VenusOS.StatusBar_LeftButton_ControlsInactive
 	topRightButton: pageLoader.item?.topRightButton ?? VenusOS.StatusBar_RightButton_None

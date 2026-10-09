@@ -10,7 +10,7 @@ FocusScope {
 	id: root
 
 	property string title
-	property color backgroundColor: Theme.color_page_background
+	property color backgroundColor: "transparent"
 	property bool fullScreenWhenIdle
 	readonly property bool isCurrentPage: !!Global.mainView && Global.mainView.currentPage === root
 	readonly property bool defaultAnimationEnabled: !!Global.mainView
