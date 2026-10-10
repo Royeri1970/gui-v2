@@ -31,6 +31,21 @@ OverviewWidget {
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 		}
+
+		Text {
+			visible: Global.system.dc.hasPower
+			text: {
+				let values = []
+				if (!isNaN(Global.system.dc.voltage))
+					values.push(Global.system.dc.voltage.toFixed(1) + " V")
+				if (!isNaN(Global.system.dc.current))
+					values.push(Global.system.dc.current.toFixed(1) + " A")
+				return values.join("\n")
+			}
+			color: Theme.color_font_primary
+			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
+			Layout.fillWidth: true
+		}
 	}
 
 	onClicked: {
