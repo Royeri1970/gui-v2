@@ -90,9 +90,11 @@ OverviewWidget {
 					values.push(solarCurrent.value.toFixed(1) + " A")
 				if (chargerState.valid)
 					values.push(VenusOS.solarCharger_stateToText(chargerState.value))
+				if (solarYieldToday.valid)
+					values.push("I dag: " + solarYieldToday.value.toFixed(2) + " kWh")
 				return values.join("\n")
 			}
-			color: Theme.color_font_secondary
+			color: Theme.color_font_primary
 			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
 			Layout.fillWidth: true
 		}
