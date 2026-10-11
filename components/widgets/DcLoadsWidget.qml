@@ -42,7 +42,7 @@ OverviewWidget {
             }
             sourceType: VenusOS.ElectricalQuantity_Source_Dc
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: implicitHeight
         }
 
         Text {
