@@ -21,7 +21,7 @@ Window {
 		anchors.fill: parent
 		source: Qt.platform.os === "wasm"
 				? "qrc:/images/rapido-bg.png"
-				: "file:/data/rapido-bg.png"
+				: "qrc:/images/rapido-bg.png"
 		fillMode: Image.PreserveAspectCrop
 		opacity: 0.28
 		smooth: true
