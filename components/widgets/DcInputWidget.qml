@@ -22,7 +22,9 @@ OverviewWidget {
 			: "/pages/settings/devicelist/dc-in/PageDcMeter.qml"
 	readonly property bool _widgetOnlyPresentsDcGensets: root.serviceType === "dcgenset" && inputDeviceModel.commonMeterType !== -1
 
-	title: VenusOS.dcMeter_typeToText(inputType)
+	title: root.type === VenusOS.OverviewWidget_Type_Alternator
+? "DCDC Lading"
+: VenusOS.dcMeter_typeToText(inputType)
 	enabled: true
 
 	contentItem: ColumnLayout {
