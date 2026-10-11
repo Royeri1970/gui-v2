@@ -46,8 +46,11 @@ OverviewWidget {
 		}
 
 		QuantityLabel {
-			visible: root.type === VenusOS.OverviewWidget_Type_Alternator && inputDeviceModel.count === 1 && !isNaN(firstDcDevice.voltage)
-			value: firstDcDevice.voltage
+			visible: root.type === VenusOS.OverviewWidget_Type_Alternator
+					&& !isNaN(inputDeviceModel.totalPower)
+					&& !isNaN(inputDeviceModel.totalCurrent)
+					&& inputDeviceModel.totalCurrent !== 0
+			value: inputDeviceModel.totalPower / inputDeviceModel.totalCurrent
 			unit: VenusOS.Units_Volt_DC
 			alignment: Qt.AlignLeft
 			font.pixelSize: Theme.font_overviewPage_widget_quantityLabel_tiny
@@ -74,7 +77,9 @@ OverviewWidget {
 
 	DcMeterDeviceModel {
 		id: inputDeviceModel
-		serviceTypes: [ root.serviceType ]
+		serviceTypes: root.type === VenusOS.OverviewWidget_Type_Alternator
+				? [ "alternator", "dcdc" ]
+				: [ root.serviceType ]
 		meterTypeFilter: root.inputTypeFilter
 	}
 
