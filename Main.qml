@@ -15,7 +15,9 @@ Window {
 	//% "Venus OS GUI"
 	//~ Context only shown on desktop systems
 	title: qsTrId("venus_os_gui")
-	color: Global.allPagesLoaded && !!guiLoader.item ? guiLoader.item.mainView.backgroundColor : Theme.color_page_background
+	color: Qt.platform.os === "wasm"
+		? (Global.allPagesLoaded && !!guiLoader.item ? guiLoader.item.mainView.backgroundColor : Theme.color_page_background)
+		: Theme.color_page_background
 
 	Image {
 		anchors.fill: parent
