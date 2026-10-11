@@ -80,7 +80,9 @@ OverviewWidget {
 		serviceTypes: root.type === VenusOS.OverviewWidget_Type_Alternator
 				? [ "alternator", "dcdc" ]
 				: [ root.serviceType ]
-		meterTypeFilter: root.inputTypeFilter
+		meterTypeFilter: root.type === VenusOS.OverviewWidget_Type_Alternator
+				? -1
+				: root.inputTypeFilter
 	}
 
 	Component {
