@@ -14,7 +14,7 @@ QtObject {
 	readonly property real maximumPower: _maximumPower.valid ? _maximumPower.value : NaN
 
 	readonly property DcMeterDeviceModel model: DcMeterDeviceModel {
-		serviceTypes: ["alternator", "fuelcell", "dcsource", "dcgenset"]
+		serviceTypes: ["alternator", "dcdc", "fuelcell", "dcsource", "dcgenset"]
 	}
 
 	readonly property VeQuickItem _maximumPower: VeQuickItem {
@@ -24,6 +24,7 @@ QtObject {
 	function overviewWidgetTypeForService(serviceType, dcMeterType = -1) {
 		switch (serviceType) {
 		case "alternator":
+		case "dcdc":
 			return VenusOS.OverviewWidget_Type_Alternator
 		case "dcgenset":
 			return VenusOS.OverviewWidget_Type_DcGenerator
