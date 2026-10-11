@@ -65,6 +65,29 @@ OverviewWidget {
 				Layout.fillHeight: true // push reason text to bottom of layout
 			}
 
+			RowLayout {
+				Layout.fillWidth: true
+				spacing: Theme.geometry_overviewPage_widget_content_spacing
+
+				Label {
+					text: "Inverter"
+					color: Theme.color_font_secondary
+					font.pixelSize: root.secondaryFontSize
+					Layout.fillWidth: true
+				}
+
+				MiniToggleButton {
+					id: inverterToggle
+					checked: inverterMode.value === VenusOS.InverterCharger_Mode_On
+					enabled: inverterMode.valid && inverterModeAdjustable.value !== 0
+
+					onClicked: inverterMode.setValue(
+							inverterMode.value === VenusOS.InverterCharger_Mode_On
+								? VenusOS.InverterCharger_Mode_ChargerOnly
+								: VenusOS.InverterCharger_Mode_On)
+				}
+			}
+
 			Label {
 				text: systemReason.text
 				wrapMode: Text.WordWrap
@@ -93,6 +116,20 @@ OverviewWidget {
 				inOverviewWidget: true
 			}
 		}
+	}
+
+	VeQuickItem {
+		id: inverterMode
+		uid: Global.inverterChargers.firstObject
+				? Global.inverterChargers.firstObject.serviceUid + "/Mode"
+				: ""
+	}
+
+	VeQuickItem {
+		id: inverterModeAdjustable
+		uid: Global.inverterChargers.firstObject
+				? Global.inverterChargers.firstObject.serviceUid + "/ModeIsAdjustable"
+				: ""
 	}
 
 	Loader {
