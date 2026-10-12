@@ -22,10 +22,10 @@ Window {
 	Image {
 		anchors.fill: parent
 		source: Qt.platform.os === "wasm"
-				? "qrc:/images/rapido-bg.png"
-				: "qrc:/images/rapido-bg.png"
+			? "qrc:/images/rapido-bg.png"
+			: "qrc:/images/rapido-gx-baked.png"
 		fillMode: Image.PreserveAspectCrop
-		opacity: 0.28
+		opacity: Qt.platform.os === "wasm" ? 0.28 : 1.0
 		smooth: true
 	}
 
