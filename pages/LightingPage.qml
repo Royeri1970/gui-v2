@@ -16,8 +16,6 @@ SwipeViewPage {
 
         model: SortedIOChannelGroupModel {
             sourceModel: Global.switches.groups
-            filterRole: IOChannelGroupModel.GroupNameRole
-            filterRegularExpression: "^Belysning$"
         }
 
         delegate: IOChannelGroupCard {
