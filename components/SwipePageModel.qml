@@ -8,10 +8,10 @@ ObjectModel {
 
 	required property SwipeView view
 	readonly property list<SwipeViewPage> pages
-		: showBoatPage && showLevelsPage ? [ boatPageLoader.item, briefPage, overviewPage, temperaturePage, levelsPageLoader.item, notificationsPage, settingsPage ]
-		: showBoatPage ? [ boatPageLoader.item, briefPage, overviewPage, temperaturePage, notificationsPage, settingsPage ]
-		: showLevelsPage ? [ briefPage, overviewPage, temperaturePage, levelsPageLoader.item, notificationsPage, settingsPage ]
-		: [ briefPage, overviewPage, temperaturePage, notificationsPage, settingsPage ]
+		: showBoatPage && showLevelsPage ? [ boatPageLoader.item, briefPage, overviewPage, temperaturePage, lightingPage, levelsPageLoader.item, notificationsPage, settingsPage ]
+		: showBoatPage ? [ boatPageLoader.item, briefPage, overviewPage, temperaturePage, lightingPage, notificationsPage, settingsPage ]
+		: showLevelsPage ? [ briefPage, overviewPage, temperaturePage, lightingPage, levelsPageLoader.item, notificationsPage, settingsPage ]
+		: [ briefPage, overviewPage, temperaturePage, lightingPage, notificationsPage, settingsPage ]
 	readonly property bool showLevelsPage: levelsPageLoader.active && !!levelsPageLoader.item
 	readonly property bool showBoatPage: boatPageLoader.active && !!boatPageLoader.item
 	readonly property int tankCount: Global.tanks ? Global.tanks.totalTankCount : 0
@@ -22,10 +22,10 @@ ObjectModel {
 		&& Global.systemSettings
 		&& Global.tanks
 		&& Global.environmentInputs
-		&& ((boatPageLoader.active && levelsPageLoader.active) ? pages.length === 7
-		  : boatPageLoader.active ? pages.length === 6
-		  : levelsPageLoader.active ? pages.length === 6
-		  : pages.length === 5)
+		&& ((boatPageLoader.active && levelsPageLoader.active) ? pages.length === 8
+		  : boatPageLoader.active ? pages.length === 7
+		  : levelsPageLoader.active ? pages.length === 7
+		  : pages.length === 6)
 
 	property bool _completed: false
 
@@ -66,6 +66,11 @@ ObjectModel {
 
 	TemperaturePage {
 		id: temperaturePage
+		view: root.view
+	}
+
+	LightingPage {
+		id: lightingPage
 		view: root.view
 	}
 
