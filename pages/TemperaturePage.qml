@@ -9,10 +9,10 @@ iconSource: "qrc:/images/levels.svg"
 url: "qrc:/qt/qml/Victron/VenusOS/pages/TemperaturePage.qml"
 topLeftButton: VenusOS.StatusBar_LeftButton_ControlsInactive
 
-Grid {
+Item {
 anchors.centerIn: parent
-columns: 2
-spacing: 20
+width: 620
+height: 490
 
 Repeater {
 model: [
@@ -43,6 +43,13 @@ model: [
 "instance": 104,
 "batteryServiceName": "com.victronenergy.battery.virtual_154dd133fbac3227",
 "batteryInstance": 103
+},
+{
+"name": "Utetemperatur",
+"serviceName": "com.victronenergy.temperature.virtual_805c5fbd106d7dd5",
+"instance": 100,
+"batteryServiceName": "com.victronenergy.battery.virtual_abf504108b3354e9",
+"batteryInstance": 104
 }
 ]
 
@@ -50,6 +57,9 @@ Rectangle {
 width: 300
 height: 150
 radius: 16
+
+x: index === 4 ? 160 : (index % 2) * 320
+y: index === 4 ? 340 : Math.floor(index / 2) * 170
 color: Theme.color_background_secondary
 
 VeQuickItem {
@@ -106,6 +116,14 @@ valueColor: {
         if (t <= -18)
             return "#4da3ff"
         return Theme.color_red
+    }
+
+    if (modelData.instance === 100) {
+        if (t < 0) return "#275D9B"
+        if (t < 10) return "#39A9DB"
+        if (t < 20) return "#369B70"
+        if (t < 30) return "#E7A33F"
+        return "#BD4848"
     }
 
     if (t < 18)
