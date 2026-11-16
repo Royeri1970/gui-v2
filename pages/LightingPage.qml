@@ -10,6 +10,7 @@ SwipeViewPage {
     topLeftButton: VenusOS.StatusBar_LeftButton_ControlsInactive
 
     property SwitchableOutput rgbOutput: null
+    property SwitchableOutput autoOutput: null
 
     // Finn RGB-lyset i Belysning-gruppen
     Repeater {
@@ -34,11 +35,19 @@ SwipeViewPage {
                                 && modelData.formattedName.indexOf("Markiselys") !== -1) {
                             root.rgbOutput = modelData
                         }
+
+                        if (modelData.type === VenusOS.SwitchableOutput_Type_Toggle
+                                && (modelData.formattedName.indexOf("Markiselys Bevegelse") !== -1
+                                    || modelData.formattedName === "Markiselys Auto")) {
+                            root.autoOutput = modelData
+                        }
                     }
 
                     Component.onDestruction: {
                         if (root.rgbOutput === modelData)
                             root.rgbOutput = null
+                        if (root.autoOutput === modelData)
+                            root.autoOutput = null
                     }
                 }
             }
@@ -51,7 +60,7 @@ SwipeViewPage {
 
         sourceComponent: Item {
             width: 790
-            height: 390
+            height: 450
 
             ColorDimmerData {
                 id: rgbData
@@ -66,7 +75,7 @@ SwipeViewPage {
                 // Venstre panel
                 Rectangle {
                     width: 410
-                    height: 360
+                    height: 430
                     radius: 16
                     color: Theme.color_background_secondary
 
@@ -157,8 +166,40 @@ SwipeViewPage {
                                 }
                             }
                         }
+
+                    // Eksisterende GX-bryter for bevegelsesstyring
+                    Column {
+                        width: parent.width
+                        spacing: 6
+                        visible: root.autoOutput !== null
+
+                        Label {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: "Markiselys Bevegelsessensor"
+                            color: Theme.color_font_primary
+                            font.pixelSize: 19
+                        }
+
+                        ToggleButtonRow {
+                            width: parent.width
+                            height: 54
+                            on: autoState.expectedValue === 1
+                            onOnClicked: autoState.writeValue(1)
+                            onOffClicked: autoState.writeValue(0)
+
+                            SettingSync {
+                                id: autoState
+                                dataItem: VeQuickItem {
+                                    uid: root.autoOutput
+                                         ? root.autoOutput.uid + "/State" : ""
+                                }
+                            }
+                        }
+                    }
                     }
                 }
+
+                // Bryter for automatisk markiselys legges i venstre panel
 
                 // Høyre panel – permanent fargehjul
                 Rectangle {
