@@ -183,6 +183,12 @@ SwipeViewPage {
                         ToggleButtonRow {
                             width: parent.width
                             height: 54
+                        defaultBackgroundWidth: width
+                        defaultBackgroundHeight: height
+                        topInset: 0
+                        bottomInset: 0
+                        leftInset: 0
+                        rightInset: 0
                             on: autoState.expectedValue === 1
                             onOnClicked: autoState.writeValue(1)
                             onOffClicked: autoState.writeValue(0)
