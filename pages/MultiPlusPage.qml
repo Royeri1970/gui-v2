@@ -81,77 +81,125 @@ SwipeViewPage {
                     height: 334
                     spacing: 12
 
-                    // Stylised BLUE MultiPlus-II unit, built with QML shapes.
-                    Rectangle {
-                        id: devicePanel
-                        width: Math.round((dashboard.width - 24) * 0.27)
-                        height: parent.height
-                        color: "#12273d"
-                        radius: 12
-                        border.color: "#327bb4"
-                        border.width: 1
+                     // Frontmotiv: blå MultiPlus-II med sorte hjørnebeskyttere.
+                     // Tegnet i QML for lokal GX og WebAssembly, uten ekstra bildefil.
+                     Rectangle {
+                         id: devicePanel
+                         width: Math.round((dashboard.width - 24) * 0.27)
+                         height: parent.height
+                         radius: 12
+                         color: "#12273d"
+                         border.color: "#327bb4"
+                         border.width: 1
 
-                        Rectangle {
-                            x: 15; y: 12
-                            width: parent.width - 30
-                            height: parent.height - 24
-                            radius: 7
-                            color: "#1174c4"
-                            border.color: "#59b8ed"
-                            border.width: 2
+                         Rectangle {
+                             id: multipIusCase
+                             x: 23
+                             y: 9
+                             width: parent.width - 46
+                             height: parent.height - 18
+                             radius: 5
+                             color: "#126fbd"
+                             border.color: "#55afe0"
+                             border.width: 1
 
-                            Rectangle {
-                                x: 0; y: 79
-                                width: parent.width
-                                height: 18
-                                color: "#f77c22"
-                            }
-                            Text {
-                                x: 12; y: 30
-                                text: "victron energy"
-                                color: "white"
-                                font.pixelSize: 15
-                                font.bold: true
-                            }
-                            Text {
-                                x: 12; y: 118
-                                text: "MultiPlus-II"
-                                color: "white"
-                                font.pixelSize: 20
-                                font.bold: true
-                            }
-                            Text {
-                                x: 12; y: 148
-                                text: "12/4000/160-32"
-                                color: "#e8f4ff"
-                                font.pixelSize: 13
-                            }
-                            Rectangle {
-                                x: 12; y: 205
-                                width: parent.width - 24
-                                height: 52
-                                radius: 5
-                                color: "#073657"
-                                Text {
-                                    anchors.centerIn: parent
-                                    text: "BLUE POWER"
-                                    font.pixelSize: 13
-                                    font.bold: true
-                                    color: "#b9e7ff"
-                                }
-                            }
-                            Repeater {
-                                model: 9
-                                Rectangle {
-                                    x: 10 + index * ((parent.width - 26) / 9)
-                                    y: parent.height - 23
-                                    width: 6; height: 10
-                                    color: "#06334c"
-                                }
-                            }
-                        }
-                    }
-
+                             // Lysrefleks på metallfronten.
+                             Rectangle {
+                                 x: 3; y: 3
+                                 width: parent.width - 6; height: parent.height - 6
+                                 radius: 3
+                                 gradient: Gradient {
+                                     GradientStop { position: 0.0; color: "#258be0" }
+                                     GradientStop { position: 0.35; color: "#126fbd" }
+                                     GradientStop { position: 1.0; color: "#07538f" }
+                                 }
+                             }
+                             // Orange skillebånd som på MultiPlus-II-fronten.
+                             Rectangle {
+                                 x: 3; y: 98
+                                 width: parent.width - 6; height: 17
+                                 color: "#fa7818"
+                             }
+                             Text {
+                                 x: 14; y: 37
+                                 text: "victron energy"
+                                 color: "#ffffff"
+                                 font.pixelSize: 15
+                                 font.bold: true
+                             }
+                             Text {
+                                 x: 14; y: 144
+                                 text: "MultiPlus-II"
+                                 color: "#ffffff"
+                                 font.pixelSize: 20
+                                 font.bold: true
+                             }
+                             Text {
+                                 x: 14; y: 173
+                                 text: "12/4000/160-32"
+                                 color: "#e5f4ff"
+                                 font.pixelSize: 12
+                             }
+                             // Diskré statusmerking på den fysiske enheten.
+                             Rectangle {
+                                 x: 14; y: 215
+                                 width: 89; height: 53
+                                 radius: 4
+                                 color: "#0d3356"
+                                 border.color: "#2c5e83"
+                                 Column {
+                                     x: 8; y: 6
+                                     spacing: 3
+                                     Repeater {
+                                         model: ["inverter", "charger", "alarm"]
+                                         delegate: Row {
+                                             spacing: 5
+                                             Rectangle {
+                                                 width: 7; height: 7; radius: 4
+                                                 color: index === 2 ? "#d65f43" : "#36d96b"
+                                             }
+                                             Text {
+                                                 text: modelData
+                                                 color: "#e6f4ff"
+                                                 font.pixelSize: 9
+                                             }
+                                         }
+                                     }
+                                 }
+                             }
+                             // Ventilasjonsgrill nederst.
+                             Rectangle {
+                                 x: 3; y: parent.height - 32
+                                 width: parent.width - 6; height: 28
+                                 color: "#09283d"
+                                 Repeater {
+                                     model: 14
+                                     Rectangle {
+                                         x: 7 + index * ((parent.width - 14) / 14)
+                                         y: 7
+                                         width: 5; height: 12
+                                         radius: 1
+                                         color: "#28516c"
+                                     }
+                                 }
+                             }
+                         }
+                         // Fire sorte gummihjørner på kabinettet.
+                         Repeater {
+                             model: 4
+                             Rectangle {
+                                 width: 35
+                                 height: 27
+                                 radius: 4
+                                 x: index % 2 === 0 ? 13 : devicePanel.width - width - 13
+                                 y: index < 2 ? 4 : devicePanel.height - height - 4
+                                 gradient: Gradient {
+                                     GradientStop { position: 0.0; color: "#343b43" }
+                                     GradientStop { position: 1.0; color: "#151c24" }
+                                 }
+                             }
+                         }
+                     }
                     // Live VE.Bus indicator panel.
                     Rectangle {
                         id: ledsPanel
