@@ -8,7 +8,6 @@ SwipeViewPage {
     url: "qrc:/qt/qml/Victron/VenusOS/pages/MultiPlusPage.qml"
     topLeftButton: VenusOS.StatusBar_LeftButton_ControlsInactive
 
-    // This is the confirmed VE.Bus service and DeviceInstance on this Cerbo GX.
     readonly property string vebusUid: BackendConnection.serviceUidFromName(
         "com.victronenergy.vebus.ttyS4", 276)
 
@@ -18,247 +17,283 @@ SwipeViewPage {
                 ? Number(item.value).toFixed(digits) + " " + unit : "–"
     }
 
+    VeQuickItem { id: mainsLed; uid: root.vebusUid + "/Leds/Mains" }
+    VeQuickItem { id: inverterLed; uid: root.vebusUid + "/Leds/Inverter" }
+    VeQuickItem { id: bulkLed; uid: root.vebusUid + "/Leds/Bulk" }
+    VeQuickItem { id: absorptionLed; uid: root.vebusUid + "/Leds/Absorption" }
+    VeQuickItem { id: floatLed; uid: root.vebusUid + "/Leds/Float" }
+    VeQuickItem { id: overloadLed; uid: root.vebusUid + "/Leds/Overload" }
+    VeQuickItem { id: lowBatteryLed; uid: root.vebusUid + "/Leds/LowBattery" }
+    VeQuickItem { id: temperatureLed; uid: root.vebusUid + "/Leds/Temperature" }
+
     VeQuickItem { id: acInput; uid: root.vebusUid + "/Ac/ActiveIn/L1/V" }
+    VeQuickItem { id: acInputCurrent; uid: root.vebusUid + "/Ac/ActiveIn/L1/I" }
     VeQuickItem { id: acOutput; uid: root.vebusUid + "/Ac/Out/L1/V" }
     VeQuickItem { id: batteryVoltage; uid: root.vebusUid + "/Dc/0/Voltage" }
     VeQuickItem { id: batteryCurrent; uid: root.vebusUid + "/Dc/0/Current" }
     VeQuickItem { id: acPower; uid: root.vebusUid + "/Ac/Out/L1/P" }
     VeQuickItem { id: acConnected; uid: root.vebusUid + "/Ac/ActiveIn/Connected" }
 
+    readonly property string chargeState: floatLed.valid && Number(floatLed.value) > 0 ? "Float"
+        : absorptionLed.valid && Number(absorptionLed.value) > 0 ? "Absorption"
+        : bulkLed.valid && Number(bulkLed.value) > 0 ? "Bulk"
+        : inverterLed.valid && Number(inverterLed.value) > 0 ? "Inverter"
+        : "Standby"
+
     Rectangle {
         anchors.fill: parent
-        color: "#0a1424"
+        color: "#08192b"
 
         Flickable {
             id: scroller
             anchors.fill: parent
-            contentWidth: width
-            contentHeight: mainColumn.height + 40
-            boundsBehavior: Flickable.StopAtBounds
             clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            contentWidth: Math.max(width, 810)
+            contentHeight: 424
 
-            Column {
-                id: mainColumn
-                x: 18
-                y: 18
-                width: scroller.width - 36
-                spacing: 14
+            Item {
+                width: scroller.contentWidth
+                height: 424
 
                 Text {
-                    width: parent.width
+                    x: 16; y: 10
                     text: "MultiPlus-II 12/4000/160-32"
-                    font.pixelSize: 25
-                    font.bold: true
                     color: "#f5f9ff"
-                    wrapMode: Text.WordWrap
+                    font.pixelSize: 24
+                    font.bold: true
                 }
                 Text {
-                    text: "VE.Bus  •  LIVE STATUS"
-                    color: "#89bce8"
-                    font.pixelSize: 12
-                    font.letterSpacing: 1
+                    anchors.right: parent.right
+                    anchors.rightMargin: 18
+                    y: 18
+                    text: root.chargeState + "  •  VE.Bus"
+                    color: "#41d7a0"
+                    font.pixelSize: 14
+                    font.bold: true
                 }
 
-                // Main blue faceplate. Everything is QML: no external image assets.
-                Rectangle {
-                    width: parent.width
-                    height: mainColumn.width < 630 ? 530 : 342
-                    radius: 15
-                    color: "#10345f"
-                    border.color: "#3783c2"
-                    border.width: 2
+                // Three horizontal columns; no tall cards pushed under the navigation bar.
+                Row {
+                    id: dashboard
+                    x: 14; y: 52
+                    width: parent.width - 28
+                    height: 334
+                    spacing: 12
 
+                    // Stylised BLUE MultiPlus-II unit, built with QML shapes.
                     Rectangle {
-                        x: 2; y: 2
-                        width: parent.width - 4; height: 45
+                        id: devicePanel
+                        width: Math.round((dashboard.width - 24) * 0.27)
+                        height: parent.height
+                        color: "#12273d"
                         radius: 12
-                        color: "#194d80"
-                    }
-                    Text {
-                        x: 18; y: 12
-                        text: "victron energy"
-                        font.pixelSize: 20
-                        font.bold: true
-                        color: "#ffffff"
-                    }
-                    Text {
-                        x: 18; y: 53
-                        text: "MultiPlus-II"
-                        font.pixelSize: 23
-                        font.bold: true
-                        color: "#f5faff"
-                    }
-                    Text {
-                        x: 18; y: 82
-                        text: "12/4000/160-32"
-                        font.pixelSize: 13
-                        color: "#b4d5f0"
-                    }
+                        border.color: "#327bb4"
+                        border.width: 1
 
-                    // Stylized physical MultiPlus casing.
-                    Rectangle {
-                        id: unitBody
-                        x: 18
-                        y: 112
-                        width: parent.width < 630 ? parent.width - 36 : parent.width * 0.42
-                        height: parent.width < 630 ? 143 : 200
-                        radius: 9
-                        color: "#e4e9ed"
-                        border.color: "#99acbe"
-                        border.width: 2
                         Rectangle {
-                            x: 8; y: 8
-                            width: parent.width - 16; height: 35
-                            color: "#20629b"
-                            radius: 3
+                            x: 15; y: 12
+                            width: parent.width - 30
+                            height: parent.height - 24
+                            radius: 7
+                            color: "#1174c4"
+                            border.color: "#59b8ed"
+                            border.width: 2
+
+                            Rectangle {
+                                x: 0; y: 79
+                                width: parent.width
+                                height: 18
+                                color: "#f77c22"
+                            }
                             Text {
-                                anchors.centerIn: parent
+                                x: 12; y: 30
                                 text: "victron energy"
                                 color: "white"
-                                font.pixelSize: 16
+                                font.pixelSize: 15
                                 font.bold: true
                             }
+                            Text {
+                                x: 12; y: 118
+                                text: "MultiPlus-II"
+                                color: "white"
+                                font.pixelSize: 20
+                                font.bold: true
+                            }
+                            Text {
+                                x: 12; y: 148
+                                text: "12/4000/160-32"
+                                color: "#e8f4ff"
+                                font.pixelSize: 13
+                            }
+                            Rectangle {
+                                x: 12; y: 205
+                                width: parent.width - 24
+                                height: 52
+                                radius: 5
+                                color: "#073657"
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: "BLUE POWER"
+                                    font.pixelSize: 13
+                                    font.bold: true
+                                    color: "#b9e7ff"
+                                }
+                            }
+                            Repeater {
+                                model: 9
+                                Rectangle {
+                                    x: 10 + index * ((parent.width - 26) / 9)
+                                    y: parent.height - 23
+                                    width: 6; height: 10
+                                    color: "#06334c"
+                                }
+                            }
                         }
+                    }
+
+                    // Live VE.Bus indicator panel.
+                    Rectangle {
+                        id: ledsPanel
+                        width: Math.round((dashboard.width - 24) * 0.31)
+                        height: parent.height
+                        radius: 12
+                        color: "#0e253c"
+                        border.color: "#327bb4"
+                        border.width: 1
+
                         Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            y: 59
-                            text: "MultiPlus-II"
-                            color: "#294866"
+                            x: 14; y: 14
+                            text: "STATUS (LED)"
+                            color: "#eef7ff"
+                            font.pixelSize: 18
                             font.bold: true
-                            font.pixelSize: 19
-                        }
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            y: 86
-                            text: "12/4000/160-32"
-                            color: "#4c6680"
-                            font.pixelSize: 12
                         }
                         Rectangle {
-                            x: 14; y: parent.height - 22
-                            width: parent.width - 28; height: 7
-                            radius: 3
-                            color: "#b4bec8"
+                            x: 14; y: 43
+                            width: parent.width - 28
+                            height: 1
+                            color: "#325e83"
                         }
-                    }
-
-                    Text {
-                        id: ledTitle
-                        x: parent.width < 630 ? 20 : unitBody.x + unitBody.width + 24
-                        y: parent.width < 630 ? 266 : 107
-                        text: "STATUSINDIKATORER"
-                        color: "#b7dcfa"
-                        font.pixelSize: 13
-                        font.bold: true
-                    }
-
-                    Grid {
-                        id: ledGrid
-                        x: ledTitle.x
-                        y: ledTitle.y + 28
-                        width: parent.width < 630 ? parent.width - 40 : parent.width - x - 18
-                        columns: 2
-                        columnSpacing: 8
-                        rowSpacing: 12
-                        Repeater {
-                            model: [
-                                { label: "Mains on", path: "Mains", tint: "#44e67b" },
-                                { label: "Inverter on", path: "Inverter", tint: "#44e67b" },
-                                { label: "Bulk", path: "Bulk", tint: "#f6c44c" },
-                                { label: "Overload", path: "Overload", tint: "#f26969" },
-                                { label: "Absorption", path: "Absorption", tint: "#f6c44c" },
-                                { label: "Low battery", path: "LowBattery", tint: "#f26969" },
-                                { label: "Float", path: "Float", tint: "#f6c44c" },
-                                { label: "Temperature", path: "Temperature", tint: "#f26969" }
-                            ]
-                            delegate: Item {
-                                width: (ledGrid.width - ledGrid.columnSpacing) / 2
-                                height: 29
-                                VeQuickItem {
-                                    id: ledStatus
-                                    uid: root.vebusUid + "/Leds/" + modelData.path
-                                }
-                                Rectangle {
-                                    id: ledLamp
-                                    width: 16
-                                    height: 16
-                                    radius: 8
-                                    anchors.left: parent.left
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    color: ledStatus.valid && Number(ledStatus.value) > 0
-                                           ? modelData.tint : "#334b65"
-                                    border.color: ledStatus.valid && Number(ledStatus.value) > 0
-                                                  ? "#f4fcff" : "#6884a2"
-                                }
-                                Text {
-                                    x: ledLamp.width + 7
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: parent.width - x
-                                    text: modelData.label
-                                    color: "#f0f6fc"
-                                    font.pixelSize: 13
-                                    elide: Text.ElideRight
+                        Column {
+                            x: 14; y: 54
+                            width: parent.width - 28
+                            spacing: 2
+                            Repeater {
+                                model: [
+                                    { label: "Mains on", path: "Mains", tint: "#39ed77" },
+                                    { label: "Inverter on", path: "Inverter", tint: "#39ed77" },
+                                    { label: "Bulk", path: "Bulk", tint: "#ffcf45" },
+                                    { label: "Absorption", path: "Absorption", tint: "#ffcf45" },
+                                    { label: "Float", path: "Float", tint: "#ffcf45" },
+                                    { label: "Overload", path: "Overload", tint: "#ff6666" },
+                                    { label: "Low battery", path: "LowBattery", tint: "#ff6666" },
+                                    { label: "Temperature", path: "Temperature", tint: "#ff6666" }
+                                ]
+                                delegate: Item {
+                                    width: ledsPanel.width - 28
+                                    height: 32
+                                    VeQuickItem {
+                                        id: ledStatus
+                                        uid: root.vebusUid + "/Leds/" + modelData.path
+                                    }
+                                    Rectangle {
+                                        id: ledLamp
+                                        x: 5; y: 7
+                                        width: 17; height: 17
+                                        radius: 9
+                                        color: ledStatus.valid && Number(ledStatus.value) > 0
+                                               ? modelData.tint : "#52677a"
+                                        border.color: ledStatus.valid && Number(ledStatus.value) > 0
+                                                      ? "#eaffff" : "#8094a8"
+                                        border.width: 1
+                                    }
+                                    Text {
+                                        x: 34
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: parent.width - 36
+                                        text: modelData.label
+                                        color: "#f1f7fd"
+                                        elide: Text.ElideRight
+                                        font.pixelSize: 14
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                Rectangle {
-                    width: parent.width
-                    height: 232
-                    radius: 15
-                    color: "#112842"
-                    border.color: "#2c6094"
-                    border.width: 1
-                    Text {
-                        x: 16; y: 14
-                        text: "MÅLEVERDIER"
-                        font.pixelSize: 14
-                        font.bold: true
-                        color: "#a5cff3"
-                    }
-                    Grid {
-                        id: valueGrid
-                        x: 16; y: 47
-                        width: parent.width - 32
-                        columns: 2
-                        columnSpacing: 16
-                        rowSpacing: 14
-                        Repeater {
-                            model: [
-                                { caption: "AC INN", valueText: root.numberText(acInput, 0, "V") },
-                                { caption: "AC UT", valueText: root.numberText(acOutput, 0, "V") },
-                                { caption: "BATTERISPENNING", valueText: root.numberText(batteryVoltage, 1, "V") },
-                                { caption: "BATTERISTRØM", valueText: root.numberText(batteryCurrent, 1, "A") },
-                                { caption: "AC UT-EFFEKT", valueText: root.numberText(acPower, 0, "W") },
-                                { caption: "LANDSTRØM", valueText: acConnected.valid ? (Number(acConnected.value) ? "Tilkoblet" : "Frakoblet") : "–" }
-                            ]
-                            delegate: Column {
-                                width: (valueGrid.width - valueGrid.columnSpacing) / 2
-                                spacing: 3
-                                Text {
-                                    text: modelData.caption
-                                    color: "#a2bed9"
-                                    font.pixelSize: 11
-                                }
-                                Text {
-                                    text: modelData.valueText
-                                    color: "#f8fbff"
-                                    font.bold: true
-                                    font.pixelSize: 19
+                    // Six compact readings, all visible without vertical scrolling.
+                    Rectangle {
+                        id: valuesPanel
+                        width: dashboard.width - devicePanel.width - ledsPanel.width - 24
+                        height: parent.height
+                        radius: 12
+                        color: "#0e253c"
+                        border.color: "#327bb4"
+                        border.width: 1
+
+                        Text {
+                            x: 14; y: 14
+                            text: "MÅLEVERDIER"
+                            color: "#eef7ff"
+                            font.pixelSize: 18
+                            font.bold: true
+                        }
+                        Rectangle {
+                            x: 14; y: 43
+                            width: parent.width - 28
+                            height: 1
+                            color: "#325e83"
+                        }
+                        Column {
+                            x: 14; y: 52
+                            width: parent.width - 28
+                            spacing: 4
+                            Repeater {
+                                model: [
+                                    { label: "AC inn (landstrøm)", val: root.numberText(acInput, 0, "V") },
+                                    { label: "AC inngangsstrøm", val: root.numberText(acInputCurrent, 1, "A") },
+                                    { label: "AC ut", val: root.numberText(acOutput, 0, "V") },
+                                    { label: "Batterispenning", val: root.numberText(batteryVoltage, 1, "V") },
+                                    { label: "Batteristrøm", val: root.numberText(batteryCurrent, 1, "A") },
+                                    { label: "AC ut-effekt", val: root.numberText(acPower, 0, "W") }
+                                ]
+                                delegate: Rectangle {
+                                    width: valuesPanel.width - 28
+                                    height: 39
+                                    radius: 6
+                                    color: index % 2 === 0 ? "#163756" : "#112b46"
+                                    Text {
+                                        x: 9
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: parent.width * 0.57
+                                        text: modelData.label
+                                        color: "#b8d7f3"
+                                        font.pixelSize: 12
+                                        elide: Text.ElideRight
+                                    }
+                                    Text {
+                                        anchors.right: parent.right
+                                        anchors.rightMargin: 9
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: modelData.val
+                                        color: "#ffffff"
+                                        font.bold: true
+                                        font.pixelSize: 16
+                                    }
                                 }
                             }
                         }
+                        Text {
+                            x: 14; y: parent.height - 26
+                            width: parent.width - 28
+                            text: acConnected.valid
+                                  ? (Number(acConnected.value) ? "● Landstrøm tilkoblet" : "○ Landstrøm frakoblet")
+                                  : "Landstrøm: –"
+                            font.pixelSize: 12
+                            color: acConnected.valid && Number(acConnected.value) ? "#42d99a" : "#a8bed3"
+                        }
                     }
-                }
-
-                Text {
-                    width: parent.width
-                    text: "Status og måleverdier leses direkte fra MultiPlus-II via VE.Bus."
-                    color: "#9eb5cd"
-                    font.pixelSize: 12
-                    wrapMode: Text.WordWrap
                 }
             }
         }
