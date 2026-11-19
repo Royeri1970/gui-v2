@@ -376,6 +376,7 @@ set (VictronVenusOS_QML_MODULE_SOURCES
     pages/OverviewPage.qml
     pages/TemperaturePage.qml
     pages/LightingPage.qml
+    pages/MultiPlusPage.qml
     pages/OverviewPage_Landscape.qml
     pages/OverviewPage_Portrait.qml
     pages/PageManager.qml
